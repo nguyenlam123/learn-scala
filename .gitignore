@@ -6,4 +6,4 @@ hs_err_pid*
 
 target/
 
-.metals
+.metals/
