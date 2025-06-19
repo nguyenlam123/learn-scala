@@ -4,7 +4,7 @@ import example.core.IsSorted
 
 class IsSortedSuite extends munit.FunSuite {
   test("sorted ascending") {
-    assert(IsSorted.isSorted(Array(1, 2, 3), _ < _) == true)
+    assert(IsSorted.isSorted(Array(1, 2, 3), _ > _) == true)
   }
 
   test("not sorted") {
@@ -12,10 +12,10 @@ class IsSortedSuite extends munit.FunSuite {
   }
 
   test("sorted descending") {
-    assert(IsSorted.isSorted(Array(3, 2, 1), _ > _) == true)
+    assert(IsSorted.isSorted(Array(3, 2, 1), _ < _) == true)
   }
 
    test("sorted ascending, but trying with greater than comparison function") {
-    assert(IsSorted.isSorted(Array(1, 2, 3), _ > _) == false)
+    assert(IsSorted.isSorted(Array(1, 2, 3), _ < _) == false)
   }
 }
