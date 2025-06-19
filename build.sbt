@@ -3,7 +3,7 @@ val scala3 = "3.6.4"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
-ThisBuild / scalaVersion := scala2
+ThisBuild / scalaVersion := scala3
 ThisBuild / organization := "com.example"
 
 lazy val hello = project
