@@ -40,6 +40,13 @@ object List:
       go(n, as)
     }
 
+  def dropWhile[A](as: List[A], f: A => Boolean): List[A] = as match
+    case Nil => Nil
+    case Cons(h, t) => {
+      if (f(h)) then dropWhile(t, f)
+      else Cons(h, t)
+    }
+  
 import List.*
 
 val result = List(1,2,3,4,5) match 

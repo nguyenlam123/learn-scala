@@ -51,4 +51,18 @@ class ListMatchSuite extends munit.FunSuite {
     
     assert(List.drop(list, 6) == Nil)
   }
+
+  test("Drop while an empty list") {
+    val predicate = (x: Int) => x < 3
+
+    assert(List.dropWhile(Nil, predicate) == Nil)
+  }
+
+  test("Drop while list") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(3, 4, 5)
+    val predicate = (x: Int) => x < 3
+
+    assert(List.dropWhile(list, predicate) == resList)
+  }
 }
