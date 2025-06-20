@@ -18,6 +18,10 @@ object List:
     case Cons(0.0, _) => 0.0
     case Cons(x, xs) => x * product(xs)
 
+  def tail[A](list: List[A]): List[A] = (list: List[A]) match
+    case Nil => sys.error("message")
+    case Cons(_, t) => t
+
 import List.*
 
 val result = List(1,2,3,4,5) match 
