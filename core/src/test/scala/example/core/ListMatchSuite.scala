@@ -28,4 +28,27 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.setHead(99, list) == resList)
   }
+
+  test("Drop an empty list") {
+    assert(List.drop(Nil, 2) == Nil)
+  }
+
+  test("Drop two elements from list") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(3, 4, 5)
+
+    assert(List.drop(list, 2) == resList)
+  }
+
+  test("Drop all elements from list") {
+    val list = List(1, 2, 3, 4, 5)
+    
+    assert(List.drop(list, 5) == Nil)
+  }
+
+  test("Drop more elements than list length") {
+    val list = List(1, 2, 3, 4, 5)
+    
+    assert(List.drop(list, 6) == Nil)
+  }
 }

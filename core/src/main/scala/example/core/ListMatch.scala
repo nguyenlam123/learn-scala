@@ -26,6 +26,19 @@ object List:
     case Nil => Cons(h, Nil)
     case Cons(_, t) => Cons(h, t)
 
+  def drop[A](as: List[A], n: Int): List[A] = as match
+    case Nil => Nil
+    case Cons(_, t) => {
+      @annotation.tailrec
+      def go(n: Int, curr: List[A]): List[A] =
+        if (curr == Nil) then Nil
+        else if (n == 0) then curr
+        else curr match
+          case Nil => Nil
+          case Cons(_, t) => go(n - 1, t)
+        
+      go(n, as)
+    }
 
 import List.*
 
