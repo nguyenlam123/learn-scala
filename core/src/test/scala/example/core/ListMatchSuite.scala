@@ -65,4 +65,19 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.dropWhile(list, predicate) == resList)
   }
+
+   test("Init nil") {
+    assert(List.init(Nil) == Nil)
+  }
+
+  test("Init list one element") {
+    assert(List.init(List(1)) == Nil)
+  }
+
+   test("Init list") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(1, 2, 3, 4)
+
+    assert(List.init(list) == resList)
+  }
 }

@@ -40,6 +40,11 @@ object List:
       if (f(h)) then dropWhile(t, f)
       else Cons(h, t)
     }
+
+  def init[A](as: List[A]): List[A] = as match
+    case Nil => Nil
+    case Cons(h, Nil) => Nil
+    case Cons(h, t) => Cons(h, init(t))
   
 import List.*
 
