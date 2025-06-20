@@ -22,6 +22,11 @@ object List:
     case Nil => sys.error("message")
     case Cons(_, t) => t
 
+  def setHead[A](h: A, list: List[A]): List[A] = list match
+    case Nil => Cons(h, Nil)
+    case Cons(_, t) => Cons(h, t)
+
+
 import List.*
 
 val result = List(1,2,3,4,5) match 

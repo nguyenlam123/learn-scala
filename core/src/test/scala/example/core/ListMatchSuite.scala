@@ -15,4 +15,17 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.tail(list) == tail)
   }
+
+  test("Set head for empty list") {
+    val resList = List(1)
+
+    assert(List.setHead(1, Nil) == resList)
+  }
+
+  test("Set head for list") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(99, 2, 3, 4, 5)
+
+    assert(List.setHead(99, list) == resList)
+  }
 }
