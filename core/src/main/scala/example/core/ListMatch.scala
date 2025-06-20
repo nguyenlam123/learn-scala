@@ -29,15 +29,9 @@ object List:
   def drop[A](as: List[A], n: Int): List[A] = as match
     case Nil => Nil
     case Cons(_, t) => {
-      @annotation.tailrec
-      def go(n: Int, curr: List[A]): List[A] =
-        if (curr == Nil) then Nil
-        else if (n == 0) then curr
-        else curr match
-          case Nil => Nil
-          case Cons(_, t) => go(n - 1, t)
-        
-      go(n, as)
+      if (as == Nil) then Nil
+      else if (n == 0) then as
+      else drop(t, n - 1)
     }
 
   def dropWhile[A](as: List[A], f: A => Boolean): List[A] = as match
