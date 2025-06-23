@@ -126,4 +126,11 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.foldLeft(list, 0, (x, _) => x + 1) == 5)
   }
+
+  test("reverse list") {
+    val list = List(1, 2, 3, 4, 5)
+    val reversedList = List(5, 4, 3, 2, 1)
+
+    assert(List.reverse(list) == reversedList)
+  }
 }

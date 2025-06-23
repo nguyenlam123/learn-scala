@@ -59,6 +59,10 @@ object List:
   def foldLeft[A, B](as: List[A], acc: B, f: (B, A) => B): B = as match
       case Nil => acc
       case Cons(x, xs) => foldLeft(xs, f(acc, x), f)
+
+  def reverse[A](as: List[A]): List[A] = as match
+    case Nil => Nil
+    case Cons(x, xs) => foldLeft(as, Nil:List[A], (xs, x) => Cons(x, xs))
   
 import List.*
 
