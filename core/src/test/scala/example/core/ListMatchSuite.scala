@@ -106,4 +106,24 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.length(list) == 5)
   }
+
+  test("Fold left sum") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(1, 2, 3, 4)
+
+    assert(List.foldLeft(list, 0, _ + _) == 15)
+  }
+
+  test("Fold left product") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(1, 2, 3, 4)
+
+    assert(List.foldLeft(list, 1.0, _ * _) == 120)
+  }
+
+  test("Fold left length") {
+    val list = List(1, 2, 3, 4, 5)
+
+    assert(List.foldLeft(list, 0, (x, _) => x + 1) == 5)
+  }
 }
