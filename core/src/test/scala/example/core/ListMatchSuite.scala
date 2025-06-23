@@ -143,4 +143,11 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(res1 == List(1, 2, 3, 4, 5, 6, 7))
   }
+
+  test("add one to each element in list") {
+    val a1 = List(1, 2, 3, 4, 5)
+    val res = List(2, 3, 4, 5, 6)
+
+    assert(List.appendOne(a1) == res)
+  }
 }

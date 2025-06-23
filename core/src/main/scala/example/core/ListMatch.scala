@@ -70,8 +70,12 @@ object List:
       case (a1, Nil) => a1
       case (Nil, a2) => a2
       case (a1, a2) => foldLeft(reverse(a1), a2, (xs, x) => Cons(x, xs))
+
+  def appendOne[A](as: List[Int]): List[Int] =
+    as match
+      case Nil => Nil
+      case Cons(x, xs) => foldLeft(reverse(as), Nil: List[Int], (xs, x) => Cons(x + 1, xs))
     
-  
 import List.*
 
 val result = List(1,2,3,4,5) match 
