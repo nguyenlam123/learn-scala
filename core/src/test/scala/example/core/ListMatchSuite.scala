@@ -178,4 +178,11 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.filter(a1, (x) => x > 3) == res)
   }
+
+  test("flat map") {
+    val a1 = List(1, 2, 3)
+    val res = List(1, 1,2, 2, 3, 3)
+
+    assert(List.flatMap(a1, i => List(i,i)) == res)
+  }
 }

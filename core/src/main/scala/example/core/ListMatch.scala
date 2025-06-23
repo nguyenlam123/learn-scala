@@ -93,6 +93,11 @@ object List:
         if (f(x)) then Cons(x, xs)
         else xs
       })
+
+  def flatMap[A, B](as: List[A], f: A => List[B]): List[B] =
+    as match
+      case Nil => Nil
+      case Cons(x, xs) => foldLeft(reverse(as), Nil: List[B], (xs, x) => append(f(x), xs))
     
 import List.*
 
