@@ -171,4 +171,11 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.map(a1, (x) => x + 1) == res)
   }
+
+  test("filter") {
+    val a1 = List(1, 2, 3, 4, 5)
+    val res = List(4, 5)
+
+    assert(List.filter(a1, (x) => x > 3) == res)
+  }
 }
