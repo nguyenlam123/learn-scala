@@ -94,4 +94,16 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.foldRight(list, 1.0, _ * _) == 120)
   }
+
+   test("Fold right, compute the length of a nil list") {
+    val list = Nil
+
+    assert(List.length(list) == 0)
+  }
+
+  test("Fold right, compute the length of a nil list") {
+    val list = List(1, 2, 3, 4, 5)
+
+    assert(List.length(list) == 5)
+  }
 }
