@@ -45,6 +45,11 @@ object List:
     case Nil => Nil
     case Cons(h, Nil) => Nil
     case Cons(h, t) => Cons(h, init(t))
+
+  def foldRight[A, B](as: List[A], acc: B, f: (A, B) => B): B =
+    as match
+      case Nil => acc
+      case Cons(x, xs) => f(x, foldRight(xs, acc, f))
   
 import List.*
 

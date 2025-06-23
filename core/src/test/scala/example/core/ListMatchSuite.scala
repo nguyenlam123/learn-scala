@@ -80,4 +80,18 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.init(list) == resList)
   }
+
+   test("Fold right sum") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(1, 2, 3, 4)
+
+    assert(List.foldRight(list, 0, _ + _) == 15)
+  }
+
+  test("Fold right product") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(1, 2, 3, 4)
+
+    assert(List.foldRight(list, 1.0, _ * _) == 120)
+  }
 }
