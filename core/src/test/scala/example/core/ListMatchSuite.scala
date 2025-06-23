@@ -150,4 +150,11 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.appendOne(a1) == res)
   }
+
+  test("list of doubles to list of strings") {
+    val a1: List[Double] = List(1.0, 2.0, 3.0, 4.0, 5.0)
+    val res: List[String] = List("1.0", "2.0", "3.0", "4.0", "5.0")
+
+    assert(List.toString(a1) == res)
+  }
 }

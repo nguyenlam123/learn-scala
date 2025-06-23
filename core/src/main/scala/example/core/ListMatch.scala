@@ -75,6 +75,11 @@ object List:
     as match
       case Nil => Nil
       case Cons(x, xs) => foldLeft(reverse(as), Nil: List[Int], (xs, x) => Cons(x + 1, xs))
+
+  def toString[Double](as: List[Double]): List[String] =
+    as match
+      case Nil => Nil
+      case Cons(x, xs) => foldLeft(reverse(as), Nil: List[String], (xs, x) => Cons(x.toString(), xs))
     
 import List.*
 
