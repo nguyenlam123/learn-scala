@@ -98,6 +98,14 @@ object List:
     as match
       case Nil => Nil
       case Cons(x, xs) => foldLeft(reverse(as), Nil: List[B], (xs, x) => append(f(x), xs))
+  
+  def filterWithFlatMap[A](as: List[A], f: A => Boolean): List[A] =
+    as match
+      case Nil => Nil
+      case Cons(x, xs) => flatMap(as, (x) => {
+        if (f(x)) then List(x)
+        else Nil
+      })
     
 import List.*
 
