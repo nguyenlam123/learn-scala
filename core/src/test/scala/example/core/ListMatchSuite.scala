@@ -130,7 +130,17 @@ class ListMatchSuite extends munit.FunSuite {
   test("reverse list") {
     val list = List(1, 2, 3, 4, 5)
     val reversedList = List(5, 4, 3, 2, 1)
+    val res = List.reverse(list)
 
-    assert(List.reverse(list) == reversedList)
+    assert(res == reversedList)
+  }
+
+  test("append list") {
+    val a1 = List(1, 2, 3, 4, 5)
+    val a2 = List(6, 7)
+    val res = List(1, 2, 3, 4, 5, 6, 7)
+    val res1 = List.append(a1, a2)
+
+    assert(res1 == List(1, 2, 3, 4, 5, 6, 7))
   }
 }
