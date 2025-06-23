@@ -157,4 +157,18 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.toString(a1) == res)
   }
+
+  test("map product") {
+    val a1: List[Double] = List(1.0, 2.0, 3.0, 4.0, 5.0)
+    val res: List[Double] = List(2.0, 4.0, 6.0, 8.0, 10.0)
+
+    assert(List.map(a1, (x) => x * 2) == res)
+  }
+
+  test("map sum") {
+    val a1 = List(1, 2, 3, 4, 5)
+    val res = List(2, 3, 4, 5, 6)
+
+    assert(List.map(a1, (x) => x + 1) == res)
+  }
 }

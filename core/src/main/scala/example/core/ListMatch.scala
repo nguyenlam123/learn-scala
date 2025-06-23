@@ -80,6 +80,12 @@ object List:
     as match
       case Nil => Nil
       case Cons(x, xs) => foldLeft(reverse(as), Nil: List[String], (xs, x) => Cons(x.toString(), xs))
+
+  def map[A, B](as: List[A], f: A => B): List[B] =
+    as match
+      case Nil => Nil
+      case Cons(x, xs) => foldLeft(reverse(as), Nil: List[B], (xs, x) => Cons(f(x), xs))
+    
     
 import List.*
 
