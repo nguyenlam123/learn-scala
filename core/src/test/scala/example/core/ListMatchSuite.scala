@@ -192,4 +192,13 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(List.filterWithFlatMap(a1, (x) => x > 3) == res)
   }
+
+  test("add corr") {
+    val a1 = List(1, 2, 3)
+    val a2 = List(4, 5, 6)
+    val res = List(5, 7, 9)
+    val act = List.addCorr(a1, a2, Nil: List[Int])
+
+    assert(act == res)
+  }
 }

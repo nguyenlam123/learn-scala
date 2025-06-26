@@ -106,7 +106,12 @@ object List:
         if (f(x)) then List(x)
         else Nil
       })
-    
+
+  def addCorr(a1: List[Int], a2: List[Int], res: List[Int]): List[Int] =
+    (a1, a2) match
+      case (Cons(x, xs), Cons(y, ys)) =>  addCorr(xs, ys, Cons(x + y, res))
+      case _ => reverse(res)
+
 import List.*
 
 val result = List(1,2,3,4,5) match 
