@@ -158,6 +158,13 @@ class ListMatchSuite extends munit.FunSuite {
     assert(res1 == List(1, 2, 3, 4, 5, 6, 7))
   }
 
+  test("concat list of lists into single list") {
+    val a1 = List(List(1, 2), List(3, 4), List(5, 6))
+    val res = List.concat(a1, Nil: List[Int])
+
+    assert(res == List(1, 2, 3, 4, 5, 6))
+  }
+
   test("add one to each element in list") {
     val a1 = List(1, 2, 3, 4, 5)
     val res = List(2, 3, 4, 5, 6)

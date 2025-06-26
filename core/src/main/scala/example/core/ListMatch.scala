@@ -76,6 +76,10 @@ object List:
       case (Nil, a2) => a2
       case (a1, a2) => foldLeft(reverse(a1), a2, (xs, x) => Cons(x, xs))
 
+  def concat[A](as: List[List[A]], res: List[A]): List[A] = (as, res) match
+    case (Cons(x, xs), res) => concat(xs, append(res, x: List[A]))
+    case _ => res
+  
   def appendOne[A](as: List[Int]): List[Int] =
     as match
       case Nil => Nil
