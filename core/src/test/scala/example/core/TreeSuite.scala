@@ -38,4 +38,13 @@ class TreeSuite extends munit.FunSuite {
 
     assert(Tree.maximum(tree) == 101)
   }
+
+  test("Get depth of tree") {
+    val left = Leaf(1)
+    val right = Branch(Branch(Branch(Leaf(1), Leaf(2)), Branch(Leaf(3), Leaf(4))), Leaf(99))
+
+    val tree = Branch(left, right)
+
+    assert(Tree.depth(tree) == 5)
+  }
 }
