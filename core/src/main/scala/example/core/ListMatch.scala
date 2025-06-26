@@ -112,6 +112,11 @@ object List:
       case (Cons(x, xs), Cons(y, ys)) =>  addCorr(xs, ys, Cons(x + y, res))
       case _ => reverse(res)
 
+  def corrGen[A](a1: List[A], a2: List[A], res: List[A], f: (a: A, b: A) => A): List[A] =
+    (a1, a2) match
+      case (Cons(x, xs), Cons(y, ys)) =>  corrGen(xs, ys, Cons(f(x, y), res), f)
+      case _ => reverse(res)
+
 import List.*
 
 val result = List(1,2,3,4,5) match 

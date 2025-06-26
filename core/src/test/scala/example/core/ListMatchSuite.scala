@@ -201,4 +201,15 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(act == res)
   }
+
+  test("take the product of corresponding elements") {
+    val a1 = List(1, 2, 3)
+    val a2 = List(4, 5, 6)
+    val res = List(4, 10, 18)
+    val prod = (a: Int, b: Int) => a * b
+
+    val act = List.corrGen(a1, a2, Nil, prod)
+
+    assert(act == res)
+  }
 }
