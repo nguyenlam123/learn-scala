@@ -135,6 +135,20 @@ class ListMatchSuite extends munit.FunSuite {
     assert(res == reversedList)
   }
 
+  test("Fold right tail rec sum") {
+    val list = List(1, 2, 3, 4, 5)
+    val res = List.foldRightTailRec(list, 0, _ + _)
+
+    assert(res == 15)
+  }
+
+  test("Fold right tail rec product") {
+    val list = List(1, 2, 3, 4, 5)
+    val resList = List(1, 2, 3, 4)
+
+    assert(List.foldRightTailRec(list, 1.0, _ * _) == 120)
+  }
+
   test("append list") {
     val a1 = List(1, 2, 3, 4, 5)
     val a2 = List(6, 7)

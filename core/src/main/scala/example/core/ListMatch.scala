@@ -63,6 +63,11 @@ object List:
   def reverse[A](as: List[A]): List[A] = as match
     case Nil => Nil
     case Cons(x, xs) => foldLeft(as, Nil:List[A], (xs, x) => Cons(x, xs))
+  
+  def foldRightTailRec[A, B](as: List[A], acc: B, f: (A, B) => B): B =
+    as match
+      case Nil => acc
+      case Cons(x, xs) => foldLeft(reverse(as), acc, (b: B, a: A) => f(a, b))
 
   def append[A](a1: List[A], a2: List[A]): List[A] =
     (a1, a2) match
