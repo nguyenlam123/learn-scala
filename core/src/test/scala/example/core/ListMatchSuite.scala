@@ -212,4 +212,49 @@ class ListMatchSuite extends munit.FunSuite {
 
     assert(act == res)
   }
+
+  test("hasSubsequence 1") {
+    val a1 = List(1, 2, 3, 4)
+    val a2 = List(1, 2)
+
+    val act = List.hasSubsequence(a1, a2, false)
+
+    assert(act == true)
+  }
+
+  test("hasSubsequence 2") {
+    val a1 = List(1, 2, 3, 4)
+    val a2 = List(2, 3)
+
+    val act = List.hasSubsequence(a1, a2, false)
+
+    assert(act == true)
+  }
+
+   test("hasSubsequence 3") {
+    val a1 = List(1, 2, 3, 4)
+    val a2 = List(4)
+
+    val act = List.hasSubsequence(a1, a2, false)
+
+    assert(act == true)
+  }
+
+  test("is not a subsequence") {
+    val a1 = List(1, 2, 3, 4)
+    val a2 = List(2, 4)
+
+    val act = List.hasSubsequence(a1, a2, false)
+
+    assert(act == false)
+  }
+
+  test("is not a subsequence 2") {
+    val a1 = List(1, 2, 3, 4)
+    val a2 = List(5, 6, 7)
+
+    val act = List.hasSubsequence(a1, a2, false)
+
+    assert(act == false)
+  }
 }

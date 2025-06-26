@@ -117,6 +117,17 @@ object List:
       case (Cons(x, xs), Cons(y, ys)) =>  corrGen(xs, ys, Cons(f(x, y), res), f)
       case _ => reverse(res)
 
+  def hasSubsequence[A](sup: List[A], sub: List[A], hasStarted: Boolean): Boolean = 
+    (sup, sub) match
+      case (_, Nil) => true
+      case (Nil, Cons(_, _)) => false // If we have iterated through the sup list and still don't have a match, return false
+      case  (Cons(x, xs), Cons(y, ys)) => {
+        if (x != y && filter(Cons(x, xs), (z) => z == y) == Nil) then false // If the current element is not equal and we can't find it further in the sequence, return false
+        if (x != y && hasStarted) then false // If they are not equal and a sequence have been started, return false
+        else if (x == y) then hasSubsequence(xs, ys, true) // Move on in the sub list if they are equal. Kick in the flag indicating that a sequence has been started
+        else hasSubsequence(xs, Cons(y, ys), hasStarted) // Stay if they are not equal
+      }
+    
 import List.*
 
 val result = List(1,2,3,4,5) match 
