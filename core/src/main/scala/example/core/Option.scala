@@ -7,3 +7,7 @@ enum Option[+A]:
   def mean(xs: Seq[Double]): Option[Double] =
     if xs.isEmpty then None
     else Some(xs.sum / xs.length)
+
+  def map[B](f: A => B): Option[B] = this match
+    case Some(get: A) => Some(f(get))
+    case None => None
