@@ -3,6 +3,8 @@ val scala3 = "3.6.4"
 
 val toolkitTest = "org.scala-lang" %% "toolkit-test" % "0.1.7"
 
+val catsEffect = "org.typelevel" %% "cats-effect" % "3.6.1" withSources() withJavadoc()
+
 ThisBuild / scalaVersion := scala3
 ThisBuild / organization := "com.example"
 
@@ -21,5 +23,6 @@ lazy val helloCore = project
   .settings(
     name := "Hello Core",
     libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
-    libraryDependencies += toolkitTest % Test
+    libraryDependencies += toolkitTest % Test,
+    libraryDependencies += catsEffect
   )
