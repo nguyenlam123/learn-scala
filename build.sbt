@@ -15,6 +15,8 @@ lazy val hello = project
   .enablePlugins(JavaAppPackaging)
   .settings(
     name := "Hello",
+    Compile / run / fork := true,
+    Test / fork := true,
     libraryDependencies += toolkitTest % Test
   )
 
@@ -22,6 +24,8 @@ lazy val helloCore = project
   .in(file("core"))
   .settings(
     name := "Hello Core",
+    Compile / run / fork := true,
+    Test / fork := true,
     libraryDependencies += "org.scala-lang" %% "toolkit" % "0.1.7",
     libraryDependencies += toolkitTest % Test,
     libraryDependencies += catsEffect
