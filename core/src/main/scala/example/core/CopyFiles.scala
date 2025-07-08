@@ -26,12 +26,12 @@ object CopyFiles extends IOApp {
       outStream <- outputStream(out)
     } yield (inStream, outStream)
 
-  def transfer(in: InputStream, out: OutputStream, buffer: Array[Byte], acc: Long): IO[Long] =
-    for {
-      amount <- IO.blocking(in.read(buffer, 0, buffer.length))
-      count <- if (amount > -1) IO.blocking(out.write(buffer, 0, amount)) >> transfer(in, out, buffer, acc + amount)
-              else IO.pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
-    } yield count // Returns the actual amount of bytes transferred
+  def transfer[F[_]: Sync](in: InputStream, out: OutputStream, buffer: Array[Byte], acc: Long): F[Long] =
+  for {
+    amount <- Sync[F].blocking(in.read(buffer, 0, buffer.length))
+    count  <- if(amount > -1) Sync[F].blocking(out.write(buffer, 0, amount)) >> transfer(in, out, buffer, acc + amount)
+              else Sync[F].pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
+  } yield count // Returns the actual amount of bytes transferred
 
   def copy(origin: File, destination: File): IO[Long] = {
     val inIO: IO[InputStream]  = IO.blocking(new FileInputStream(origin))
