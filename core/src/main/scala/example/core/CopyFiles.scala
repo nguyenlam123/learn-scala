@@ -6,11 +6,13 @@ import java.io._
 import scala.collection.immutable.List
 
 object CopyFiles extends IOApp {
-  def inputStream(f: File): Resource[IO, FileInputStream] =
+  def inputStream[F[_]: Sync](f: File): Resource[F, FileInputStream] =
     Resource.make {
-      IO.blocking(new FileInputStream(f))                         // build
+      Sync[F].blocking(new FileInputStream(f)) // build
     } { inStream =>
-      IO.blocking(inStream.close()).handleErrorWith(_ => IO.unit) // release
+      Sync[F]
+        .blocking(inStream.close())
+        .handleErrorWith(_ => Sync[F].unit) // release
     }
 
   def outputStream(f: File): Resource[IO, FileOutputStream] =
