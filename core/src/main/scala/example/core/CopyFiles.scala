@@ -15,25 +15,25 @@ object CopyFiles extends IOApp {
         .handleErrorWith(_ => Sync[F].unit) // release
     }
 
-  def outputStream(f: File): Resource[IO, FileOutputStream] =
+  def outputStream[F[_]: Sync](f: File): Resource[F, FileOutputStream] =
     Resource.make {
-      IO.blocking(new FileOutputStream(f))                         // build
+      Sync[F].blocking(new FileOutputStream(f))                         // build
     } { outStream =>
-      IO.blocking(outStream.close()).handleErrorWith(_ => IO.unit) // release
+      Sync[F].blocking(outStream.close()).handleErrorWith(_ => Sync[F].unit) // release
     }
 
-  def inputOutputStreams(in: File, out: File): Resource[IO, (InputStream, OutputStream)] =
+  def inputOutputStreams[F[_]: Sync](in: File, out: File): Resource[F, (InputStream, OutputStream)] =
     for {
       inStream  <- inputStream(in)
       outStream <- outputStream(out)
     } yield (inStream, outStream)
 
   def transfer[F[_]: Sync](in: InputStream, out: OutputStream, buffer: Array[Byte], acc: Long): F[Long] =
-  for {
-    amount <- Sync[F].blocking(in.read(buffer, 0, buffer.length))
-    count  <- if(amount > -1) Sync[F].blocking(out.write(buffer, 0, amount)) >> transfer(in, out, buffer, acc + amount)
-              else Sync[F].pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
-  } yield count // Returns the actual amount of bytes transferred
+    for {
+      amount <- Sync[F].blocking(in.read(buffer, 0, buffer.length))
+      count  <- if(amount > -1) Sync[F].blocking(out.write(buffer, 0, amount)) >> transfer(in, out, buffer, acc + amount)
+                else Sync[F].pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
+    } yield count // Returns the actual amount of bytes transferred
 
   def copy(origin: File, destination: File): IO[Long] = {
     val inIO: IO[InputStream]  = IO.blocking(new FileInputStream(origin))
