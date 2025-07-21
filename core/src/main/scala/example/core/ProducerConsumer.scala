@@ -2,59 +2,77 @@ package example.core
 import cats.effect._
 import cats.effect.std.Console
 import cats.syntax.all._
+import cats.effect.syntax.all._
 import scala.collection.immutable.Queue
-import scala.collection.immutable.List
-import scala.concurrent.duration.DurationInt
 import cats.effect.Deferred
+import scala.List
 
 object ProducerConsumer extends IOApp {
-  case class State[F[_], A](queue: Queue[A], takers: Queue[Deferred[F,A]])
+  case class State[F[_], A](queue: Queue[A], capacity: Int, takers: Queue[Deferred[F,A]], offerers: Queue[(A, Deferred[F,Unit])])
+
   object State {
-    def empty[F[_], A]: State[F,A] = State(Queue.empty, Queue.empty)
+    def empty[F[_], A](capacity: Int): State[F, A] = State(Queue.empty, capacity, Queue.empty, Queue.empty)
   }
 
   def producer[F[_]: Async: Console](id: Int, counterR: Ref[F, Int], stateR: Ref[F, State[F,Int]]): F[Unit] = {
 
     def offer(i: Int): F[Unit] =
-      stateR.modify {
-        case State(queue, takers) if takers.nonEmpty =>
-          val (taker, rest) = takers.dequeue
-          State(queue, rest) -> taker.complete(i).void
-        case State(queue, takers) =>
-          State(queue.enqueue(i), takers) -> Async[F].unit
-      }.flatten
+      Deferred[F, Unit].flatMap[Unit]{ offerer =>
+        Async[F].uncancelable { poll => // `poll` used to embed cancelable code, i.e. the call to `offerer.get`
+          stateR.modify {
+            case State(queue, capacity, takers, offerers) if takers.nonEmpty =>
+              val (taker, rest) = takers.dequeue
+              State(queue, capacity, rest, offerers) -> taker.complete(i).void
+            case State(queue, capacity, takers, offerers) if queue.size < capacity =>
+              State(queue.enqueue(i), capacity, takers, offerers) -> Async[F].unit
+            case State(queue, capacity, takers, offerers) =>
+              val cleanup = stateR.update { s => s.copy(offerers = s.offerers.filter(_._2 ne offerer)) }
+              State(queue, capacity, takers, offerers.enqueue(i -> offerer)) -> poll(offerer.get).onCancel(cleanup)
+          }.flatten
+        }
+      }
 
     for {
       i <- counterR.getAndUpdate(_ + 1)
       _ <- offer(i)
       _ <- Async[F].whenA(i % 100000 == 0)(Console[F].println(s"Producer $id has reached $i items"))
-      _ <- Async[F].sleep(1.microsecond) // To prevent overwhelming consumers
       _ <- producer(id, counterR, stateR)
     } yield ()
   }
 
   def consumer[F[_]: Async: Console](id: Int, stateR: Ref[F, State[F, Int]]): F[Unit] = {
+
     val take: F[Int] =
       Deferred[F, Int].flatMap { taker =>
-        stateR.modify {
-          case State(queue, takers) if queue.nonEmpty =>
-            val (i, rest) = queue.dequeue
-            State(rest, takers) -> Async[F].pure(i) // Got element in queue, we can just return it
-          case State(queue, takers) =>
-            State(queue, takers.enqueue(taker)) -> taker.get // No element in queue, must block caller until some is available
-        }.flatten
+        Async[F].uncancelable { poll =>
+          stateR.modify {
+            case State(queue, capacity, takers, offerers) if queue.nonEmpty && offerers.isEmpty =>
+              val (i, rest) = queue.dequeue
+              State(rest, capacity, takers, offerers) -> Async[F].pure(i)
+            case State(queue, capacity, takers, offerers) if queue.nonEmpty =>
+              val (i, rest) = queue.dequeue
+              val ((move, release), tail) = offerers.dequeue
+              State(rest.enqueue(move), capacity, takers, tail) -> release.complete(()).as(i)
+            case State(queue, capacity, takers, offerers) if offerers.nonEmpty =>
+              val ((i, release), rest) = offerers.dequeue
+              State(queue, capacity, takers, rest) -> release.complete(()).as(i)
+            case State(queue, capacity, takers, offerers) =>
+              val cleanup = stateR.update { s => s.copy(takers = s.takers.filter(_ ne taker)) }
+              State(queue, capacity, takers.enqueue(taker), offerers) -> poll(taker.get).onCancel(cleanup)
+          }.flatten
+        }
       }
 
     for {
       i <- take
-      _ <- Async[F].whenA(i % 10000 == 0)(Console[F].println(s"Consumer $id has reached $i items"))
+      _ <- Async[F].whenA(i % 100000 == 0)(Console[F].println(s"Consumer $id has reached $i items"))
       _ <- consumer(id, stateR)
     } yield ()
   }
 
     override def run(args: List[String]): IO[ExitCode] =
       for {
-        stateR <- Ref.of[IO, State[IO,Int]](State.empty[IO, Int])
+        stateR <- Ref.of[IO, State[IO,Int]](State.empty[IO, Int](capacity = 1000))
         counterR <- Ref.of[IO, Int](1)
         producers = List.range(1, 11).map(producer(_, counterR, stateR)) // 10 producers
         consumers = List.range(1, 11).map(consumer(_, stateR))           // 10 consumers
